@@ -54,7 +54,8 @@ jobs:
     - name: Install the package
       run: npm install ansible-ansible-language-server-*.tgz
     - name: Populate the test dependencies
-      run: npm ci
+      # run: npm ci
+      run: npm i
       working-directory: node_modules/@ansible/ansible-language-server
     - name: Run testing against the installed package
       run: npm test
