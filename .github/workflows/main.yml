@@ -35,7 +35,7 @@ jobs:
     needs:
     - build
 
-    runs-on: Ubuntu-latest
+    runs-on: ${{ matrix.os }}-latest
 
     strategy:
       matrix:
@@ -44,6 +44,10 @@ jobs:
         - 14.x
         - 12.x
         - 10.x
+        os:
+        - Ubuntu
+        - macOS
+        - Windows
 
     steps:
     - name: Fetch the GHA artifact with the package tarball
