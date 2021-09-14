@@ -1,0 +1,109 @@
+on:
+  pull_request:
+  push:
+
+jobs:
+  build:
+    runs-on: Ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+        - 14.x
+
+    steps:
+    - name: Fetch the src
+      uses: actions/checkout@v2
+    - name: >-
+        Set up NodeJS ${{ matrix.node-version }}
+        with the global NPM registry
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: https://registry.npmjs.org
+
+    - name: Build a package tarball artifact
+      run: npm pack
+
+    - name: Save the package tarball as a GHA artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: npm-package-tarball
+        path: >-
+          ansible-ansible-language-server-*.tgz
+
+  test:
+    needs:
+    - build
+
+    runs-on: Ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version:
+        - 16.x
+        - 14.x
+        - 12.x
+        - 10.x
+
+    steps:
+    - name: Fetch the GHA artifact with the package tarball
+      uses: actions/download-artifact@v2
+      with:
+        name: npm-package-tarball
+
+    - name: Install the package
+      run: npm install ansible-ansible-language-server-*.tgz
+    - name: Populate the test dependencies
+      run: npm ci
+      working-directory: node_modules/@ansible/ansible-language-server
+    - name: Run testing against the installed package
+      run: npm test
+      working-directory: node_modules/@ansible/ansible-language-server
+
+
+  publish:
+    environment: publishing
+    needs:
+    - test
+
+    runs-on: Ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version:
+        - 14.x
+
+    steps:
+    - name: Fetch the GHA artifact with the package tarball
+      uses: actions/upload-artifact@v2
+      with:
+        name: npm-package-tarball
+        path: .
+
+    - name: >-
+        Set up NodeJS ${{ matrix.node-version }}
+        with the global NPM registry
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: https://registry.npmjs.org
+    - name: >-
+        Publish the prebuilt and tested package
+        to public NPM Registry
+      run: npm publish ansible-ansible-language-server-*.tgz
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+    - name: >-
+        Set up NodeJS ${{ matrix.node-version }}
+        with the GitHub Packages NPM registry
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: https://npm.pkg.github.com
+    - name: >-
+        Publish the prebuilt and tested package
+        to GitHub Packages NPM Registry
+      run: npm publish ansible-ansible-language-server-*.tgz
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
