@@ -75,6 +75,8 @@ jobs:
       run: npm shrinkwrap
     - name: Purge `package-lock.json`
       run: rm -vf package-lock.json
+    - name: Purge `package.json`
+      run: rm -vf package.json
 
     - name: Install the package
       run: npm install ansible-ansible-language-server-*.tgz
