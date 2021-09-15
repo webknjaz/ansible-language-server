@@ -68,6 +68,8 @@ jobs:
       run: ln -s node_modules/@ansible/ansible-language-server/package.json
     - name: Symlink installed `package-lock.json`
       run: ln -s node_modules/@ansible/ansible-language-server/package-lock.json
+    - name: Debug
+      run: ls -alh
     - name: Populate the test dependencies
       # run: npm ci
       run: npm i
