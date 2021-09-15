@@ -57,6 +57,8 @@ jobs:
     - name: Clean-up non-test files from the src checkout
       run: find . ! -name test -a ! -name package.lock -delete
       shell: bash
+    - name: debug!
+      run: ls -alh
 
     - name: Fetch the GHA artifact with the package tarball
       uses: actions/download-artifact@v2
@@ -71,6 +73,8 @@ jobs:
       run: mv -v test node_modules/@ansible/ansible-language-server/
     - name: Move `package-lock.json` to the installed location
       run: mv -v package-lock.json node_modules/@ansible/ansible-language-server/
+    - name: debug!
+      run: ls -alh
     - name: Populate the test dependencies
       # run: npm ci
       run: npm i
