@@ -59,6 +59,7 @@ jobs:
       shell: bash
     - name: debug!
       run: ls -alh
+      shell: bash
 
     - name: Fetch the GHA artifact with the package tarball
       uses: actions/download-artifact@v2
@@ -86,8 +87,10 @@ jobs:
       run: mv -v npm-shrinkwrap.json node_modules/@ansible/ansible-language-server/
     - name: debug!
       run: ls -alh
+      shell: bash
     - name: debug!
       run: ls -alh
+      shell: bash
       working-directory: node_modules/@ansible/ansible-language-server/
     - name: Populate the test dependencies
       # run: npm ci
@@ -95,6 +98,7 @@ jobs:
       working-directory: node_modules/@ansible/ansible-language-server/
     - name: debug!
       run: ls -alh
+      shell: bash
       working-directory: node_modules/@ansible/ansible-language-server/
     - name: Run testing against the installed package
       run: npm test
