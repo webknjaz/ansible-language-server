@@ -50,6 +50,13 @@ jobs:
         - Windows
 
     steps:
+    - name: Fetch the src snapshot
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+    - name: Clean-up non-test files from the src checkout
+      run: find . ! -name test -delete
+
     - name: Fetch the GHA artifact with the package tarball
       uses: actions/download-artifact@v2
       with:
@@ -57,13 +64,15 @@ jobs:
 
     - name: Install the package
       run: npm install ansible-ansible-language-server-*.tgz
+    - name: Symlink installed `package.json`
+      run: ln -s node_modules/@ansible/ansible-language-server/package.json
+    - name: Symlink installed `package-lock.json`
+      run: ln -s node_modules/@ansible/ansible-language-server/package-lock.json
     - name: Populate the test dependencies
       # run: npm ci
       run: npm i
-      working-directory: node_modules/@ansible/ansible-language-server
     - name: Run testing against the installed package
       run: npm test
-      working-directory: node_modules/@ansible/ansible-language-server
 
 
   publish:
