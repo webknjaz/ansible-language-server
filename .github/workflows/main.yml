@@ -70,12 +70,17 @@ jobs:
         tar xzvf ansible-ansible-language-server-*.tgz package/package.json &&
         mv -v package/package.json . &&
         rmdir -v package
+    - name: Shrinkwrap the package lockfile
+      run: npm shrinkwrap
+    - name: Purge `package-lock.json`
+      run: rm -vf package-lock.json
+
     - name: Install the package
       run: npm install ansible-ansible-language-server-*.tgz
     - name: Move tests to the installed location
       run: mv -v test node_modules/@ansible/ansible-language-server/
-    - name: Move `package-lock.json` to the installed location
-      run: mv -v package-lock.json node_modules/@ansible/ansible-language-server/
+    - name: Move `npm-shrinkwrap.json` to the installed location
+      run: mv -v npm-shrinkwrap.json node_modules/@ansible/ansible-language-server/
     - name: debug!
       run: ls -alh
     - name: Populate the test dependencies
