@@ -55,7 +55,7 @@ jobs:
       with:
         fetch-depth: 1
     - name: Clean-up non-test files from the src checkout
-      run: find . ! -name test -delete
+      run: find . ! -name test -a ! -name package.lock -delete
       shell: bash
 
     - name: Fetch the GHA artifact with the package tarball
@@ -63,19 +63,21 @@ jobs:
       with:
         name: npm-package-tarball
 
+    - name: Extract the package metadata out of the tarball
+      run: tar xzvf ansible-ansible-language-server-*.tgz package/package.json
     - name: Install the package
-      run: npm install --no-package-lock ansible-ansible-language-server-*.tgz
-    - name: Copy installed `package.json`
-      run: cp -v node_modules/@ansible/ansible-language-server/package.json .
-    - name: Copy installed `package-lock.json`
-      run: cp -v node_modules/@ansible/ansible-language-server/package-lock.json .
-    - name: Debug
-      run: ls -alh
+      run: npm install ansible-ansible-language-server-*.tgz
+    - name: Move tests to the installed location
+      run: mv -v test node_modules/@ansible/ansible-language-server/
+    - name: Move `package-lock.json` to the installed location
+      run: mv -v package-lock.json node_modules/@ansible/ansible-language-server/
     - name: Populate the test dependencies
       # run: npm ci
       run: npm i
+      working-directory: node_modules/@ansible/ansible-language-server/
     - name: Run testing against the installed package
       run: npm test
+      working-directory: node_modules/@ansible/ansible-language-server/
 
 
   publish:
