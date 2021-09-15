@@ -70,6 +70,7 @@ jobs:
         tar xzvf ansible-ansible-language-server-*.tgz package/package.json &&
         mv -v package/package.json . &&
         rmdir -v package
+      shell: bash
     - name: Shrinkwrap the package lockfile
       run: npm shrinkwrap
     - name: Purge `package-lock.json`
