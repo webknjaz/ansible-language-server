@@ -100,6 +100,10 @@ jobs:
       run: ls -alh
       shell: bash
       working-directory: node_modules/@ansible/ansible-language-server/
+    - name: debug! test
+      run: ls -alhR test
+      shell: bash
+      working-directory: node_modules/@ansible/ansible-language-server/
     - name: Run testing against the installed package
       run: npm test
       working-directory: node_modules/@ansible/ansible-language-server/
