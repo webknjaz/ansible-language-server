@@ -12,7 +12,7 @@ import {
   isPlayParam,
   isRoleParam,
   isTaskParam,
-} from '../../src/utils/yaml';
+} from '@ansible/ansible-language-server/utils/yaml';
 
 async function getYamlDoc(yamlFile: string) {
   const yaml = await fs.readFile(
