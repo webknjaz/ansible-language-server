@@ -55,7 +55,7 @@ jobs:
       with:
         fetch-depth: 1
     - name: Clean-up non-test files from the src checkout
-      run: find . ! -name test -a ! -name package.lock -delete
+      run: find . -not -path "./directory/*" -a -not -path "./package-lock.json" -delete
       shell: bash
     - name: debug!
       run: ls -alh
