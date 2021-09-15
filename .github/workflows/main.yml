@@ -64,10 +64,10 @@ jobs:
 
     - name: Install the package
       run: npm install --no-package-lock ansible-ansible-language-server-*.tgz
-    - name: Symlink installed `package.json`
-      run: ln -s node_modules/@ansible/ansible-language-server/package.json
-    - name: Symlink installed `package-lock.json`
-      run: ln -s node_modules/@ansible/ansible-language-server/package-lock.json
+    - name: Copy installed `package.json`
+      run: cp -v node_modules/@ansible/ansible-language-server/package.json .
+    - name: Copy installed `package-lock.json`
+      run: cp -v node_modules/@ansible/ansible-language-server/package-lock.json .
     - name: Debug
       run: ls -alh
     - name: Populate the test dependencies
