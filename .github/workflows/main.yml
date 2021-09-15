@@ -56,6 +56,7 @@ jobs:
         fetch-depth: 1
     - name: Clean-up non-test files from the src checkout
       run: find . ! -name test -delete
+      shell: bash
 
     - name: Fetch the GHA artifact with the package tarball
       uses: actions/download-artifact@v2
