@@ -86,6 +86,9 @@ jobs:
       run: mv -v npm-shrinkwrap.json node_modules/@ansible/ansible-language-server/
     - name: debug!
       run: ls -alh
+    - name: debug!
+      run: ls -alh
+      working-directory: node_modules/@ansible/ansible-language-server/
     - name: Populate the test dependencies
       # run: npm ci
       run: npm i
