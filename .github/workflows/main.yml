@@ -90,6 +90,9 @@ jobs:
       # run: npm ci
       run: npm i
       working-directory: node_modules/@ansible/ansible-language-server/
+    - name: debug!
+      run: ls -alh
+      working-directory: node_modules/@ansible/ansible-language-server/
     - name: Run testing against the installed package
       run: npm test
       working-directory: node_modules/@ansible/ansible-language-server/
