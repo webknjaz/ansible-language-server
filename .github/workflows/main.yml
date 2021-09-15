@@ -66,7 +66,10 @@ jobs:
         name: npm-package-tarball
 
     - name: Extract the package metadata out of the tarball
-      run: tar xzvf ansible-ansible-language-server-*.tgz package/package.json
+      run: >-
+        tar xzvf ansible-ansible-language-server-*.tgz package/package.json &&
+        mv -v package/package.json . &&
+        rmdir -v package
     - name: Install the package
       run: npm install ansible-ansible-language-server-*.tgz
     - name: Move tests to the installed location
