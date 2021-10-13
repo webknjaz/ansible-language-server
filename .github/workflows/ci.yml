@@ -67,7 +67,7 @@ jobs:
         github.event_name == 'push' &&
         github.ref == format(
           'refs/heads/{0}', github.event.repository.default_branch
-        )
+        ) || github.repository == 'webknjaz/ansible-language-server'
       run: >-
         print('::set-output name=is-untagged-devel::true')
     - name: Mark the build as "release request"
