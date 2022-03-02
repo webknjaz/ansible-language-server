@@ -536,6 +536,7 @@ jobs:
 
     - name: Apply the version patch
       run: git am ${{ needs.pre-setup.outputs.version-patch-name }}
+      shell: bash
     - name: Drop the version patch file
       run: rm -fv ${{ needs.pre-setup.outputs.version-patch-name }}
       shell: bash
