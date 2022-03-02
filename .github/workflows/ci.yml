@@ -566,9 +566,6 @@ jobs:
         # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#adding-a-system-path
         npm ci
 
-    - name: npm run compile
-      run: npm run compile
-
     - name: Log ansible-lint version
       if: runner.os != 'Windows'
       run: ansible-lint --version
