@@ -441,6 +441,11 @@ jobs:
         - name: test-node16-macos
           node-version: 16
           os: macos-11
+        - name: test (wsl)
+          node-version: 16
+          # https://github.com/actions/virtual-environments/issues/5151
+          os: windows-2019
+          shell: wsl-bash {0}
         # windows
         # TODO: revisit this after windows + wsl2 node
         # is enabled in CI
@@ -462,6 +467,15 @@ jobs:
           ) && true || false
       }}
 
+    defaults:
+      run:
+        shell: ${{ matrix.shell || 'bash'}}
+
+    env:
+      FORCE_COLOR: 1  # make mocha output colorful
+      # https://devblogs.microsoft.com/commandline/share-environment-vars-between-wsl-and-windows/
+      WSLENV: FORCE_COLOR:GITHUB_PATH/p
+
     steps:
     - name: Fetch the GHA artifact with the package tarball
       uses: actions/download-artifact@v2
@@ -470,6 +484,10 @@ jobs:
     - name: >-
         Set up NodeJS ${{ matrix.node-version }}
         with the global NPM registry
+      # as Windows executables are exposed inside WSL at top of PATH, we
+      # would end with broken npm script in PATH on wsl.
+      if: >-
+        !contains(matrix.shell, 'wsl')
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
@@ -487,6 +505,13 @@ jobs:
     - name: Clean up the checkout
       run: rm -rfv *
       shell: bash
+
+    - name: Disable autocrlf
+      if: runner.os == 'Windows'
+      run: |-
+        git config --global core.autocrlf false
+        git config --global core.eol lf
+      shell: bash  # <-- keep it here to avoid using default shell
 
     - name: Fetch the src snapshot
       uses: actions/checkout@v2
@@ -515,10 +540,23 @@ jobs:
       run: rm -fv ${{ needs.pre-setup.outputs.version-patch-name }}
       shell: bash
 
+    # https://github.com/marketplace/actions/setup-wsl
+    - name: Activate WSL
+      if: contains(matrix.shell, 'wsl')
+      uses: Vampire/setup-wsl@v1
+      with:
+        # we want to load user profile
+        # https://github.com/Vampire/setup-wsl#wsl-shell-command
+        wsl-shell-command: bash -i -euo pipefail
+
     - name: Switch to using Python 3.10 by default
       uses: actions/setup-python@v2.2.2
       with:
         python-version: '3.10'
+
+    - name: Run ./tools/test-setup.sh
+      run: ./tools/test-setup.sh
+
     - name: Install test dependencies
       run: |
         python -m pip install --user --upgrade pip
@@ -526,6 +564,10 @@ jobs:
         echo "$HOME/.local/bin" >> $GITHUB_PATH
         # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#adding-a-system-path
         npm ci
+
+    - name: npm run compile
+      run: npm run compile
+
     - name: Log ansible-lint version
       if: runner.os != 'Windows'
       run: ansible-lint --version
