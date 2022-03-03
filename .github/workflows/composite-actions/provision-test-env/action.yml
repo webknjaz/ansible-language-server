@@ -3,11 +3,20 @@
 name: provision-test-env
 description: Provision test dependencies and environment
 
+inputs:
+  use-wsl:
+    default: false
+    description: >-
+      A boolean flag for identifying whether the setup should be
+      performed under the WSL environment or not.
+      (default: false)
+    required: false
+
 runs:
   using: composite
   steps:
   - name: Hi!
     run: echo Hello from an action
-    shell: ${{ 'bash' }}
+    shell: ${{ inputs.use-wsl && 'wsl-bash {0}' || 'bash' }}
 
 ...
