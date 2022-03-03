@@ -1,0 +1,13 @@
+---
+
+name: provision-test-env
+description: Provision test dependencies and environment
+
+runs:
+  using: composite
+  steps:
+  - name: Hi!
+    run: echo Hello from an action
+    shell: bash
+
+...
