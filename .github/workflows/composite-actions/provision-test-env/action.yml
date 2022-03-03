@@ -17,7 +17,7 @@ runs:
   steps:
   - name: Hi!
     run: >-
-      echo Hello from an action, requested: ${{ inputs.use-wsl && 'wsl-bash {0}' || 'bash' }}
-    shell: bash
+      echo Hello from an action, requested: ${{ toJSON(inputs.use-wsl) && 'wsl-bash {0}' || 'bash' }}
+    shell: ${{ runner.os == 'Windows' && 'wsl-bash {0}' || 'bash' }}
 
 ...
