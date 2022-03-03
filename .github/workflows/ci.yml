@@ -559,6 +559,8 @@ jobs:
     - name: ¡Hola!
       uses: ./.github/workflows/composite-actions/provision-test-env
       with:
+        shell: >-
+          ${{ contains(matrix.shell, 'wsl') && 'wsl-bash {0}' || 'bash' }}
         use-wsl: >-
           ${{ contains(matrix.shell, 'wsl') && true || false }}
 

@@ -4,6 +4,12 @@ name: provision-test-env
 description: Provision test dependencies and environment
 
 inputs:
+  shell:
+    default: bash
+    description: >-
+      Shell to use for provisioning steps
+      (default: bash)
+    required: false
   use-wsl:
     default: false
     description: >-
@@ -18,6 +24,6 @@ runs:
   - name: Hi!
     run: >-
       echo Hello from an action, requested: ${{ toJSON(inputs.use-wsl) && 'wsl-bash {0}' || 'bash' }}
-    shell: ${{ env.PATH == 'Windows' && 'wsl-bash {0}' || 'bash' }}
+    shell: ${{ inputs.shell }}
 
 ...
