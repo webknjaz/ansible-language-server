@@ -559,13 +559,14 @@ jobs:
     - name: Run ./tools/test-setup.sh
       run: ./tools/test-setup.sh
 
-    - name: Install test dependencies
+    - name: Install Python test dependencies
       run: |
         python3 -m pip install --user --upgrade pip
         python3 -m pip install --user ansible-core ansible-lint
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
         # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#adding-a-system-path
-        npm ci
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+    - name: Install NodeJS test dependencies
+      run: npm ci
 
     - name: Log ansible-lint version
       if: runner.os != 'Windows'
