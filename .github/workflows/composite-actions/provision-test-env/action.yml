@@ -21,9 +21,14 @@ inputs:
 runs:
   using: composite
   steps:
+  - name: Set shell
+    id: shell
+    run: >-
+      print('::set-output name=value::${{ inputs.shell }}')
+    shell: python
   - name: Hi!
     run: >-
       echo Hello from an action, requested: ${{ toJSON(inputs.use-wsl) && 'wsl-bash {0}' || 'bash' }}
-    shell: ${{ inputs.shell }}
+    shell: ${{ steps.shell.outputs.value }}
 
 ...
