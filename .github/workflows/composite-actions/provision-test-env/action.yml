@@ -18,6 +18,6 @@ runs:
   - name: Hi!
     run: >-
       echo Hello from an action, requested: ${{ toJSON(inputs.use-wsl) && 'wsl-bash {0}' || 'bash' }}
-    shell: ${{ runner.os == 'Windows' && 'wsl-bash {0}' || 'bash' }}
+    shell: ${{ env.PATH == 'Windows' && 'wsl-bash {0}' || 'bash' }}
 
 ...
