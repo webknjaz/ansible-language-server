@@ -530,6 +530,7 @@ jobs:
 
     - name: Apply the changelog patch
       run: git am '${{ needs.pre-setup.outputs.changelog-patch-name }}'
+      shell: bash
     - name: Drop the changelog patch file
       run: rm -fv '${{ needs.pre-setup.outputs.changelog-patch-name }}'
       shell: bash
