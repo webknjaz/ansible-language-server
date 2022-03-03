@@ -558,6 +558,9 @@ jobs:
 
     - name: ¡Hola!
       uses: ./.github/workflows/composite-actions/provision-test-env
+      with:
+        use-wsl: >-
+          ${{ contains(matrix.shell, 'wsl') && true || false }}
 
     - name: Run ./tools/test-setup.sh
       run: ./tools/test-setup.sh
