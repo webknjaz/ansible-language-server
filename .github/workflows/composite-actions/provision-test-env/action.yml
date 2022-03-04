@@ -30,6 +30,6 @@ runs:
     run: >-
       echo Hello from an action, requested: ${{ toJSON(inputs.use-wsl) && 'wsl-bash {0}' || 'bash' }}
     # shell: ${{ github.action_path }}/shell-wrapper
-    shell: .github/workflows/composite-actions/provision-test-env/shell-wrapper
+    shell: ./.github/workflows/composite-actions/provision-test-env/shell-wrapper
 
 ...
