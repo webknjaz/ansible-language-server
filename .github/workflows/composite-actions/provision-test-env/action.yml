@@ -23,7 +23,12 @@ runs:
   steps:
   - name: Set shell
     id: shell
-    run: >-
+    run: |-
+      from pathlib import Path
+
+      with Path('${{ env.GITHUB_PATH }}').open(mode='a') as path_file:
+          path_file.write('/home/runner/work/ansible/ansible-language-server/.github/workflows/composite-actions/provision-test-env/\n')
+
       print('::set-output name=value::${{ inputs.shell }}')
     shell: python
   - name: Hi!
@@ -32,6 +37,7 @@ runs:
     # shell: ${{ github.action_path }}/shell-wrapper
     # shell: ./.github/workflows/composite-actions/provision-test-env/shell-wrapper {0}
     #shell: /home/runner/work/ansible/ansible-language-server/.github/workflows/composite-actions/provision-test-env/shell-wrapper {0}
-    shell: /home/runner/work/ansible/ansible-language-server/.github/workflows/composite-actions/provision-test-env/shell-wrapper
+    #shell: /home/runner/work/ansible/ansible-language-server/.github/workflows/composite-actions/provision-test-env/shell-wrapper
+    shell: shell-wrapper {0}
 
 ...
